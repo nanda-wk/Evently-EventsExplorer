@@ -13,6 +13,7 @@ struct Home: View {
         NavigationStack {
             content
                 .navigationTitle("Discover Events")
+                .navigationBarTitleDisplayMode(.inline)
                 .task {
                     await viewModel.loadEvents()
                 }
@@ -26,17 +27,37 @@ extension Home {
         switch viewModel.events {
         case .isLoading:
             ProgressView()
+                .padding()
                 .scaleEffect(2)
         case let .loaded(events):
-            loadedView(events: events.events)
+            loadedView(events: events)
         case let .failed(error):
             Text("Failed to fetch data \(error)")
         }
     }
 
     private func loadedView(events: [Event]) -> some View {
-        List(events, id: \.id) { event in
-            Text(event.name)
+        List {
+            ForEach(events, id: \.id) { event in
+                Section {
+                    EventCell(event: event)
+                }
+                .listRowSeparator(.hidden)
+            }
+
+            if viewModel.shouldLoadMore {
+                ProgressView()
+                    .scaleEffect(1.5)
+                    .padding()
+                    .frame(maxWidth: .infinity, alignment: .center)
+                    .listRowSeparator(.hidden)
+                    .task {
+                        await viewModel.loadEvents()
+                    }
+            }
+        }
+        .refreshable {
+            await viewModel.loadEvents(reset: true)
         }
     }
 }

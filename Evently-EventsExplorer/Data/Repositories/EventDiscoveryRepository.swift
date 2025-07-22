@@ -14,14 +14,14 @@ protocol EventDiscoveryRepositoryProtocol: NetworkProtocol {
 struct EventDiscoveryRepository: EventDiscoveryRepositoryProtocol {
     var session: URLSession
 
-    func events(with filter: Filter = Filter()) async throws -> Events {
-        try await request(requestConfiguration: API.events(filter))
+    func events(with filter: Filter) async throws -> Events {
+        try await request(requestConfiguration: API.events(filter: filter))
     }
 }
 
 extension EventDiscoveryRepository {
     enum API {
-        case events(Filter)
+        case events(filter: Filter)
         case eventDetails(Int)
     }
 }

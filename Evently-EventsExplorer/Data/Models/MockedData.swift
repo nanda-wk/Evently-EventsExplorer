@@ -45,7 +45,7 @@ import Foundation
 
     extension EventImage {
         static let mockData: EventImage = .init(
-            url: "https://s1.ticketm.net/dam/a/7e0/479ac7e7-15fb-44ba-8708-fc1bf2d037e0_ARTIST_PAGE_3_2.jpg",
+            url: .init(string: "https://s1.ticketm.net/dam/a/7e0/479ac7e7-15fb-44ba-8708-fc1bf2d037e0_ARTIST_PAGE_3_2.jpg")!,
             width: 305,
             height: 203,
             ratio: .the3_2
@@ -53,7 +53,7 @@ import Foundation
     }
 
     extension EventDate {
-        static let mockData: EventDate = .init(localDate: "2025-08-01")
+        static let mockData: EventDate = .init()
     }
 
     extension Venue {

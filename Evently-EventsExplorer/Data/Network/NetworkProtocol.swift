@@ -15,7 +15,14 @@ extension NetworkProtocol {
     func request<Value: Decodable>(
         requestConfiguration: RequestConfiguration
     ) async throws -> Value {
-        let decoder = JSONDecoder()
+        let decoder: JSONDecoder = {
+            let decoder = JSONDecoder()
+            let dateFormatter = DateFormatter()
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            decoder.dateDecodingStrategy = .formatted(dateFormatter)
+            return decoder
+        }()
+
         let httpCodes = HTTPCodes.success
         let request = try requestConfiguration.urlRequest()
         let (data, response) = try await session.data(for: request)
@@ -31,7 +38,7 @@ extension NetworkProtocol {
         do {
             return try decoder.decode(Value.self, from: data)
         } catch {
-            throw NetworkError.unexpectedResponse
+            throw NetworkError.invalidDecoding(error)
         }
     }
 }

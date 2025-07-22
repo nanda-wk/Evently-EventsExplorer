@@ -124,13 +124,13 @@ struct Event: Decodable {
 }
 
 struct EventImage: Decodable {
-    let url: String
+    let url: URL
     let width: Int
     let height: Int
-    let ratio: Ratio
+    let ratio: Ratio?
 
     init(
-        url: String = "https://example.com/image.jpg",
+        url: URL = URL(string: "https://example.com/image.jpg")!,
         width: Int = 640,
         height: Int = 360,
         ratio: Ratio = .the3_2
@@ -139,6 +139,21 @@ struct EventImage: Decodable {
         self.width = width
         self.height = height
         self.ratio = ratio
+    }
+
+    enum CodingKeys: CodingKey {
+        case url
+        case width
+        case height
+        case ratio
+    }
+
+    init(from decoder: any Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        url = try container.decode(URL.self, forKey: .url)
+        width = try container.decode(Int.self, forKey: .width)
+        height = try container.decode(Int.self, forKey: .height)
+        ratio = try container.decodeIfPresent(Ratio.self, forKey: .ratio)
     }
 }
 
@@ -151,15 +166,19 @@ enum Ratio: String, Decodable {
 struct EventDate: Decodable {
     let localDate: String
 
-    init(localDate: String = "2025-08-01") {
+    init(localDate: String = "2025-08-11") {
         self.localDate = localDate
+    }
+
+    enum CodingKeys: CodingKey {
+        case localDate
     }
 }
 
 struct Venue: Decodable {
     let name: String
     let city: String
-    let state: String
+    let state: String?
     let country: String
     let address: String
     let latitude: String
@@ -221,8 +240,11 @@ struct Venue: Decodable {
         let cityContainer = try container.nestedContainer(keyedBy: CityKeys.self, forKey: .city)
         city = try cityContainer.decode(String.self, forKey: .name)
 
-        let stateContainer = try container.nestedContainer(keyedBy: StateKeys.self, forKey: .state)
-        state = try stateContainer.decode(String.self, forKey: .name)
+        if let stateContainer = try? container.nestedContainer(keyedBy: StateKeys.self, forKey: .state) {
+            state = try stateContainer.decode(String.self, forKey: .name)
+        } else {
+            state = nil
+        }
 
         let countryContainer = try container.nestedContainer(keyedBy: CountryKeys.self, forKey: .country)
         country = try countryContainer.decode(String.self, forKey: .name)

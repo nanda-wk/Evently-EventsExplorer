@@ -8,15 +8,15 @@
 import Foundation
 
 protocol EventDiscoveryServiceProtocol {
-    func load() async throws -> Events
+    func load(with filter: Filter) async throws -> Events
 }
 
 struct EventDiscoveryService: EventDiscoveryServiceProtocol {
     let apiRepository: EventDiscoveryRepositoryProtocol
 
-    func load() async throws -> Events {
+    func load(with filter: Filter) async throws -> Events {
         do {
-            return try await apiRepository.events(with: .init())
+            return try await apiRepository.events(with: filter)
         } catch {
             throw error
         }
@@ -24,7 +24,7 @@ struct EventDiscoveryService: EventDiscoveryServiceProtocol {
 }
 
 struct StubEventDiscoveryService: EventDiscoveryServiceProtocol {
-    func load() async throws -> Events {
+    func load(with _: Filter = Filter()) async throws -> Events {
         .mockData
     }
 }
