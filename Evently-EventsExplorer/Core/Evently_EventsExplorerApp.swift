@@ -9,9 +9,11 @@ import SwiftUI
 
 @main
 struct Evently_EventsExplorerApp: App {
+    private let environment = AppEnvironment.bootstrap()
+
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            Home(viewModel: .init(container: environment.container))
         }
     }
 }

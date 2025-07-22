@@ -8,7 +8,6 @@
 import XCTest
 
 final class Evently_EventsExplorerUITestsLaunchTests: XCTestCase {
-
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
     }

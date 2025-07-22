@@ -1,0 +1,78 @@
+//
+//  EventDiscoveryRepository.swift
+//  Evently-EventsExplorer
+//
+//  Created by Nanda WK on 2025-07-22.
+//
+
+import Foundation
+
+protocol EventDiscoveryRepositoryProtocol: NetworkProtocol {
+    func events(with filter: Filter) async throws -> Events
+}
+
+struct EventDiscoveryRepository: EventDiscoveryRepositoryProtocol {
+    var session: URLSession
+
+    func events(with filter: Filter = Filter()) async throws -> Events {
+        try await request(requestConfiguration: API.events(filter))
+    }
+}
+
+extension EventDiscoveryRepository {
+    enum API {
+        case events(Filter)
+        case eventDetails(Int)
+    }
+}
+
+extension EventDiscoveryRepository.API: RequestConfiguration {
+    var path: String {
+        switch self {
+        case .events:
+            "/events"
+        case let .eventDetails(id):
+            "/events/\(id)"
+        }
+    }
+
+    var method: HTTPMethod {
+        switch self {
+        case .events, .eventDetails:
+            .GET
+        }
+    }
+
+    var headers: [String: String]? {
+        nil
+    }
+
+    var parameter: [String: Any]? {
+        guard let apikey = Bundle.main.object(forInfoDictionaryKey: "API_KEY") as? String else {
+            fatalError("API_KEY not found")
+        }
+
+        var params: [String: Any] = [
+            "apikey": apikey,
+        ]
+
+        switch self {
+        case let .events(filter):
+            if let keyword = filter.keyword {
+                params["keyword"] = keyword
+            }
+
+            if let page = filter.page {
+                params["page"] = page
+            }
+
+        case .eventDetails: break
+        }
+
+        return params
+    }
+
+    var encoding: HTTPEncoding {
+        .QUERY_STRING
+    }
+}

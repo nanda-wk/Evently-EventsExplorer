@@ -5,11 +5,10 @@
 //  Created by Nanda WK on 2025-07-22.
 //
 
-import XCTest
 @testable import Evently_EventsExplorer
+import XCTest
 
 final class Evently_EventsExplorerTests: XCTestCase {
-
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
     }
@@ -28,9 +27,8 @@ final class Evently_EventsExplorerTests: XCTestCase {
 
     func testPerformanceExample() throws {
         // This is an example of a performance test case.
-        self.measure {
+        measure {
             // Put the code you want to measure the time of here.
         }
     }
-
 }
