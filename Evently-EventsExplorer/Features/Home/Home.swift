@@ -39,8 +39,12 @@ extension Home {
     private func loadedView(events: [Event]) -> some View {
         List {
             ForEach(events, id: \.id) { event in
-                Section {
-                    EventCell(event: event)
+                NavigationLink {
+                    EventDetail(event: event)
+                } label: {
+                    Section {
+                        EventCell(event: event)
+                    }
                 }
                 .listRowSeparator(.hidden)
             }
@@ -56,6 +60,7 @@ extension Home {
                     }
             }
         }
+        .listStyle(.plain)
         .refreshable {
             await viewModel.loadEvents(reset: true)
         }

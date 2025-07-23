@@ -31,7 +31,6 @@ extension Home {
                 page = 0
                 totalPages = 0
                 allEvents.removeAll()
-                events = .isLoading
             }
 
             isLoadingMore = true
