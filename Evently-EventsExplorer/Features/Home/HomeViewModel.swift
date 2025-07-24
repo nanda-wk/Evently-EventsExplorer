@@ -13,9 +13,9 @@ extension Home {
         @Published var events: Loadable<[Event]> = .isLoading
         @Published var shouldLoadMore: Bool = false
 
-        private var isLoadingMore: Bool = false
-        private var allEvents: [Event] = []
-        private var page = 0
+        private(set) var isLoadingMore: Bool = false
+        private(set) var allEvents: [Event] = []
+        private(set) var page = 0
 
         let container: DIContainer
 
