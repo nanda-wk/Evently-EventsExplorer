@@ -36,7 +36,7 @@ extension Home {
             do {
                 let filter = Filter(page: page)
                 let pagedEvents = try await container.services.eventDiscoveryService.load(with: filter)
-                let newEvents = pagedEvents.events
+                let newEvents = pagedEvents.embedded?.events ?? []
 
                 allEvents.append(contentsOf: newEvents)
 

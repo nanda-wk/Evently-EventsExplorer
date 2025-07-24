@@ -10,10 +10,11 @@ import Foundation
 class SearchViewModel {
     private(set) var events: [Event] = []
     private var page = 0
-    private var canLoadMore = true
-    private var isFetching = false
+    private(set) var canLoadMore = true
+    private(set) var isFetching = false
 
     var keyword = ""
+    private(set) var isEventListEmpty = false
 
     var onUpdate: (() -> Void)?
 
@@ -27,11 +28,13 @@ class SearchViewModel {
         events.removeAll()
         page = 0
         canLoadMore = true
+        isEventListEmpty = false
     }
 
     func loadEvents(reset: Bool = false) async {
         guard !isFetching, canLoadMore else { return }
         isFetching = true
+        onUpdate?()
 
         if reset {
             self.reset()
@@ -41,17 +44,19 @@ class SearchViewModel {
             print("Fetching page \(page) for keyword: \(keyword)")
             let filter = Filter(keyword: keyword, page: page)
             let pagedEvents = try await container.services.eventDiscoveryService.load(with: filter)
-            let newEvents = pagedEvents.events
+            let newEvents = pagedEvents.embedded?.events ?? []
 
             events.append(contentsOf: newEvents)
+            isEventListEmpty = events.isEmpty
 
             page += 1
             canLoadMore = page < pagedEvents.page.totalPages
-            onUpdate?()
         } catch {
             print("Fetch error: \(error)")
+            isEventListEmpty = true
         }
         isFetching = false
+        onUpdate?()
     }
 
     func numberOfRows() -> Int {

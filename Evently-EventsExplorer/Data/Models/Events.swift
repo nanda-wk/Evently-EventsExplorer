@@ -7,35 +7,29 @@
 
 import Foundation
 
-struct Events: Decodable {
-    let events: [Event]
+struct Events: Codable {
+    let embedded: EmbeddedEvents?
     let page: Page
 
     enum CodingKeys: String, CodingKey {
         case embedded = "_embedded"
         case page
-        case links = "_links"
     }
 
-    enum EmbeddedKeys: String, CodingKey {
+    init(embedded: EmbeddedEvents? = .init(), page: Page = .init()) {
+        self.embedded = embedded
+        self.page = page
+    }
+}
+
+struct EmbeddedEvents: Codable {
+    let events: [Event]
+
+    enum CodingKeys: String, CodingKey {
         case events
     }
 
-    init(events: [Event] = [Event()], page: Page = Page()) {
+    init(events: [Event] = [Event()]) {
         self.events = events
-        self.page = page
-    }
-
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-
-        // Decode events
-        if let embeddedContainer = try? container.nestedContainer(keyedBy: EmbeddedKeys.self, forKey: .embedded) {
-            events = try embeddedContainer.decode([Event].self, forKey: .events)
-        } else {
-            events = []
-        }
-
-        page = try container.decode(Page.self, forKey: .page)
     }
 }

@@ -15,12 +15,14 @@ struct EventCell: View {
 
     init(event: Event) {
         self.event = event
-        let date = event.date.localDate
-        let time = event.date.localTime
+        let date = event.dates?.start?.localDate
+        let time = event.dates?.start?.localTime
         if let date, let time {
             dateAndTime = "\(date.toFormatedDate(format: .EEE)), \(date.toFormatedDate(format: .MMM_d)) • \(time.toFormatedDate(format: .hmm_a))"
         }
-        address = "\(event.venue.address.orEmpty) • \(event.venue.city.orEmpty)"
+        if let embedded = event.embedded, let venue = embedded.venues.first, let address = venue.address, let city = venue.city {
+            self.address = "\(address.line1.orEmpty) • \(city.name.orEmpty)"
+        }
     }
 
     var body: some View {
@@ -43,18 +45,20 @@ struct EventCell: View {
                     .font(.footnote)
                     .foregroundStyle(.appPrimary)
 
-                Text(event.name)
+                Text(event.name.orEmpty)
                     .lineLimit(2)
                     .font(.headline)
 
-                HStack {
-                    Image(systemName: "mappin.and.ellipse")
+                if !address.isEmpty {
+                    HStack {
+                        Image(systemName: "mappin.and.ellipse")
 
-                    Text(address)
-                        .lineLimit(1)
+                        Text(address)
+                            .lineLimit(1)
+                    }
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
                 }
-                .font(.footnote)
-                .foregroundStyle(.secondary)
             }
         }
     }

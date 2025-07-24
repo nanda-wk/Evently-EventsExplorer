@@ -52,11 +52,8 @@ extension Home {
                 NavigationLink {
                     EventDetail(event: event)
                 } label: {
-                    Section {
-                        EventCell(event: event)
-                    }
+                    EventCell(event: event)
                 }
-                .listRowSeparator(.hidden)
             }
 
             if viewModel.shouldLoadMore {

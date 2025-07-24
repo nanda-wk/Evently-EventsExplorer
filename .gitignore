@@ -3,3 +3,7 @@
 
 # Sensitive Information
 Evently-EventsExplorer/Resources/Env.xcconfig
+
+# Gemini
+.gemini/
+GEMINI.md

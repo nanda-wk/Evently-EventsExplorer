@@ -58,13 +58,7 @@ extension EventDiscoveryRepository.API: RequestConfiguration {
 
         switch self {
         case let .events(filter):
-            if let keyword = filter.keyword {
-                params["keyword"] = keyword
-            }
-
-            if let page = filter.page {
-                params["page"] = page
-            }
+            params.merge(filter.toDict()) { $1 }
 
         case .eventDetails: break
         }

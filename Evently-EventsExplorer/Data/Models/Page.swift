@@ -5,7 +5,7 @@
 //  Created by Nanda WK on 2025-07-24.
 //
 
-struct Page: Decodable {
+struct Page: Codable {
     let size: Int
     let totalElements: Int
     let totalPages: Int

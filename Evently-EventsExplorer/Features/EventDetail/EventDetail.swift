@@ -15,16 +15,20 @@ struct EventDetail: View {
     private var date = ""
     private var time = ""
     private var address = ""
+    private var venue: Venue = .init()
 
     init(event: Event) {
         self.event = event
-        let date = event.date.localDate
-        let time = event.date.localTime
+        let date = event.dates?.start?.localDate
+        let time = event.dates?.start?.localTime
         if let date, let time {
             self.date = date.toFormatedDate(format: .dd_MMMM_yyyy)
             self.time = "\(date.toFormatedDate(format: .EEEE)) • \(time.toFormatedDate(format: .hmm_a))"
         }
-        address = "\(event.venue.address.orEmpty), \(event.venue.city.orEmpty)"
+        if let embedded = event.embedded, let venue = embedded.venues.first, let address = venue.address, let city = venue.city {
+            self.venue = venue
+            self.address = "\(address.line1.orEmpty) • \(city.name.orEmpty)"
+        }
     }
 
     var body: some View {
@@ -35,6 +39,7 @@ struct EventDetail: View {
                         .resizable()
                         .scaledToFill()
                         .frame(height: 244)
+                        .clipped()
 
                 } placeholder: {
                     ProgressView()
@@ -43,13 +48,15 @@ struct EventDetail: View {
                 }
 
                 VStack(alignment: .leading, spacing: 20) {
-                    Text(event.name)
+                    Text(event.name.orEmpty)
                         .font(.largeTitle)
                         .fontWeight(.medium)
 
                     VStack(alignment: .leading, spacing: 16) {
                         customListTile(icon: "calendar", title: date, subtitle: time)
-                        customListTile(icon: "mappin.and.ellipse", title: event.venue.name.orEmpty, subtitle: address)
+                        if !address.isEmpty {
+                            customListTile(icon: "mappin.and.ellipse", title: venue.name.orEmpty, subtitle: address)
+                        }
                     }
 
                     aboutSection
@@ -57,24 +64,19 @@ struct EventDetail: View {
                 .padding()
             }
         }
+        .navigationTitle("Event Details")
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
                     dismiss()
                 } label: {
-                    HStack {
-                        Image(systemName: "chevron.backward")
-
-                        Text("Event Details")
-                            .fontWeight(.medium)
-                    }
-                    .font(.title2)
-                    .foregroundStyle(.white)
-                    .shadow(color: .black.opacity(0.8), radius: 4)
+                    Image(systemName: "chevron.backward")
                 }
+                .tint(.appPrimary)
             }
         }
-        .navigationBarBackButtonHidden(true)
     }
 }
 
