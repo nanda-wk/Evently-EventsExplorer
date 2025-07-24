@@ -20,9 +20,11 @@ struct EventDetail: View {
         self.event = event
         let date = event.date.localDate
         let time = event.date.localTime
-        self.date = date.toFormatedDate(format: .dd_MMMM_yyyy)
-        self.time = "\(date.toFormatedDate(format: .EEEE)) • \(time.toFormatedDate(format: .hmm_a))"
-        address = "\(event.venue.address), \(event.venue.city)"
+        if let date, let time {
+            self.date = date.toFormatedDate(format: .dd_MMMM_yyyy)
+            self.time = "\(date.toFormatedDate(format: .EEEE)) • \(time.toFormatedDate(format: .hmm_a))"
+        }
+        address = "\(event.venue.address.orEmpty), \(event.venue.city.orEmpty)"
     }
 
     var body: some View {
@@ -47,7 +49,7 @@ struct EventDetail: View {
 
                     VStack(alignment: .leading, spacing: 16) {
                         customListTile(icon: "calendar", title: date, subtitle: time)
-                        customListTile(icon: "mappin.and.ellipse", title: event.venue.name, subtitle: address)
+                        customListTile(icon: "mappin.and.ellipse", title: event.venue.name.orEmpty, subtitle: address)
                     }
 
                     aboutSection
@@ -55,8 +57,6 @@ struct EventDetail: View {
                 .padding()
             }
         }
-        .ignoresSafeArea(edges: .top)
-        .navigationBarBackButtonHidden(true)
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
                 Button {
@@ -74,6 +74,7 @@ struct EventDetail: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden(true)
     }
 }
 

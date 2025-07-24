@@ -17,6 +17,16 @@ struct Home: View {
                 .task {
                     await viewModel.loadEvents()
                 }
+                .toolbar {
+                    ToolbarItem(placement: .topBarTrailing) {
+                        NavigationLink {
+                            SearchView(container: viewModel.container)
+                        } label: {
+                            Image(systemName: "magnifyingglass")
+                        }
+                        .tint(.appPrimary)
+                    }
+                }
         }
     }
 }

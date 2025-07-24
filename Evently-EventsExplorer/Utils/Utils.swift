@@ -27,3 +27,12 @@ extension URL {
         return components.url ?? self
     }
 }
+
+extension String? {
+    var orEmpty: String {
+        switch self {
+        case .none: ""
+        case let .some(v): v
+        }
+    }
+}

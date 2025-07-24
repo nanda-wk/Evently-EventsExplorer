@@ -16,7 +16,6 @@ extension Home {
         private var isLoadingMore: Bool = false
         private var allEvents: [Event] = []
         private var page = 0
-        private var totalPages = 0
 
         let container: DIContainer
 
@@ -29,7 +28,6 @@ extension Home {
 
             if reset {
                 page = 0
-                totalPages = 0
                 allEvents.removeAll()
             }
 
@@ -44,8 +42,7 @@ extension Home {
 
                 events = .loaded(allEvents)
                 page += 1
-                totalPages = pagedEvents.page.totalPages
-                shouldLoadMore = page < totalPages
+                shouldLoadMore = page < pagedEvents.page.totalPages
             } catch {
                 events = .failed(error)
             }

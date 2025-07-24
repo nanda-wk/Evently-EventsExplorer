@@ -17,8 +17,10 @@ struct EventCell: View {
         self.event = event
         let date = event.date.localDate
         let time = event.date.localTime
-        dateAndTime = "\(date.toFormatedDate(format: .EEE)), \(date.toFormatedDate(format: .MMM_d)) • \(time.toFormatedDate(format: .hmm_a))"
-        address = "\(event.venue.address) • \(event.venue.city)"
+        if let date, let time {
+            dateAndTime = "\(date.toFormatedDate(format: .EEE)), \(date.toFormatedDate(format: .MMM_d)) • \(time.toFormatedDate(format: .hmm_a))"
+        }
+        address = "\(event.venue.address.orEmpty) • \(event.venue.city.orEmpty)"
     }
 
     var body: some View {

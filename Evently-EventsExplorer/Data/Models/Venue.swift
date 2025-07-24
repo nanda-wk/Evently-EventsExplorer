@@ -6,13 +6,13 @@
 //
 
 struct Venue: Decodable {
-    let name: String
-    let city: String
+    let name: String?
+    let city: String?
     let state: String?
-    let country: String
-    let address: String
-    let latitude: String
-    let longitude: String
+    let country: String?
+    let address: String?
+    let latitude: String?
+    let longitude: String?
 
     enum CodingKeys: String, CodingKey {
         case name
@@ -65,10 +65,13 @@ struct Venue: Decodable {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
-        name = try container.decode(String.self, forKey: .name)
+        name = try container.decodeIfPresent(String.self, forKey: .name)
 
-        let cityContainer = try container.nestedContainer(keyedBy: CityKeys.self, forKey: .city)
-        city = try cityContainer.decode(String.self, forKey: .name)
+        if let cityContainer = try? container.nestedContainer(keyedBy: CityKeys.self, forKey: .city) {
+            city = try cityContainer.decode(String.self, forKey: .name)
+        } else {
+            city = nil
+        }
 
         if let stateContainer = try? container.nestedContainer(keyedBy: StateKeys.self, forKey: .state) {
             state = try stateContainer.decode(String.self, forKey: .name)
@@ -76,14 +79,23 @@ struct Venue: Decodable {
             state = nil
         }
 
-        let countryContainer = try container.nestedContainer(keyedBy: CountryKeys.self, forKey: .country)
-        country = try countryContainer.decode(String.self, forKey: .name)
+        if let countryContainer = try? container.nestedContainer(keyedBy: CountryKeys.self, forKey: .country) {
+            country = try countryContainer.decode(String.self, forKey: .name)
+        } else {
+            country = nil
+        }
+        if let addressContainer = try? container.nestedContainer(keyedBy: AddressKeys.self, forKey: .address) {
+            address = try addressContainer.decode(String.self, forKey: .line1)
+        } else {
+            address = nil
+        }
 
-        let addressContainer = try container.nestedContainer(keyedBy: AddressKeys.self, forKey: .address)
-        address = try addressContainer.decode(String.self, forKey: .line1)
-
-        let locationContainer = try container.nestedContainer(keyedBy: LocationKeys.self, forKey: .location)
-        latitude = try locationContainer.decode(String.self, forKey: .latitude)
-        longitude = try locationContainer.decode(String.self, forKey: .longitude)
+        if let locationContainer = try? container.nestedContainer(keyedBy: LocationKeys.self, forKey: .location) {
+            latitude = try locationContainer.decode(String.self, forKey: .latitude)
+            longitude = try locationContainer.decode(String.self, forKey: .longitude)
+        } else {
+            latitude = nil
+            longitude = nil
+        }
     }
 }
