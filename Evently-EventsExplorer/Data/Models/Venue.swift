@@ -5,7 +5,7 @@
 //  Created by Nanda WK on 2025-07-24.
 //
 
-struct Venue: Codable {
+struct Venue: Codable, Equatable {
     let id: String
     let name: String?
     let city: City?
@@ -33,27 +33,27 @@ struct Venue: Codable {
     }
 }
 
-struct City: Codable {
+struct City: Codable, Equatable {
     let name: String?
 }
 
-struct VenueState: Codable {
+struct VenueState: Codable, Equatable {
     let name: String?
     let stateCode: String?
 }
 
-struct Country: Codable {
+struct Country: Codable, Equatable {
     let name: String?
     let countryCode: String?
 }
 
-struct Address: Codable {
+struct Address: Codable, Equatable {
     let line1: String?
     let line2: String?
     let line3: String?
 }
 
-struct VenueLocation: Codable {
+struct VenueLocation: Codable, Equatable {
     let longitude: String?
     let latitude: String?
 }

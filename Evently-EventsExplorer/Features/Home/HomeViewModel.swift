@@ -11,7 +11,7 @@ extension Home {
     @MainActor
     class ViewModel: ObservableObject {
         @Published var events: Loadable<[Event]> = .isLoading
-        @Published var shouldLoadMore: Bool = false
+        @Published var shouldLoadMore: Bool = true
 
         private(set) var isLoadingMore: Bool = false
         private(set) var allEvents: [Event] = []
@@ -24,7 +24,7 @@ extension Home {
         }
 
         func loadEvents(reset: Bool = false) async {
-            guard !isLoadingMore else { return }
+            guard !isLoadingMore, shouldLoadMore else { return }
 
             if reset {
                 page = 0
@@ -40,9 +40,9 @@ extension Home {
 
                 allEvents.append(contentsOf: newEvents)
 
-                events = .loaded(allEvents)
                 page += 1
                 shouldLoadMore = page < pagedEvents.page.totalPages
+                events = .loaded(allEvents)
             } catch {
                 events = .failed(error)
             }

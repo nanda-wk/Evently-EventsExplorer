@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct EventImage: Codable {
+struct EventImage: Codable, Equatable {
     let url: URL?
     let width: Int?
     let height: Int?

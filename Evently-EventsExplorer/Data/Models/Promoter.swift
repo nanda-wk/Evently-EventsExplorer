@@ -5,7 +5,7 @@
 //  Created by Nanda WK on 2025-07-24.
 //
 
-struct Promoter: Codable {
+struct Promoter: Codable, Equatable, Identifiable {
     let id: String?
     let name: String?
     let description: String?

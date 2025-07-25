@@ -5,11 +5,11 @@
 //  Created by Nanda WK on 2025-07-24.
 //
 
-struct EventDate: Codable {
+struct EventDate: Codable, Equatable {
     let start: StartDate?
 }
 
-struct StartDate: Codable {
+struct StartDate: Codable, Equatable {
     let localDate: String?
     let localTime: String?
 

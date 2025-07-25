@@ -34,6 +34,14 @@ final class HomeViewModelTests: XCTestCase {
         cancellables = nil
     }
 
+    func testInitialState() {
+        XCTAssertEqual(sut.events, .isLoading)
+        XCTAssertTrue(sut.shouldLoadMore)
+        XCTAssertFalse(sut.isLoadingMore)
+        XCTAssertTrue(sut.allEvents.isEmpty)
+        XCTAssertEqual(sut.page, 0)
+    }
+
     func testLoadEvents_initialLoad_success() async throws {
         let mockEvents = [Event.mockData, Event.mockData]
         let mockPage = Page(size: 2, totalElements: 2, totalPages: 1, number: 0)
@@ -87,6 +95,7 @@ final class HomeViewModelTests: XCTestCase {
         let page1 = Page(size: 1, totalElements: 3, totalPages: 2, number: 0)
         let response1 = Events(embedded: .init(events: page1Events), page: page1)
         mockService.loadResult = .success(response1)
+        mockService.delay = 0.1
 
         let expectation1 = XCTestExpectation(description: "Initial page loaded")
 
@@ -94,13 +103,14 @@ final class HomeViewModelTests: XCTestCase {
             .dropFirst()
             .sink { state in
                 if case let .loaded(events) = state, events.count == 1 {
+                    XCTAssertTrue(self.sut.shouldLoadMore)
                     expectation1.fulfill()
                 }
             }
             .store(in: &cancellables)
 
         await sut.loadEvents()
-        await fulfillment(of: [expectation1], timeout: 1.0)
+        await fulfillment(of: [expectation1], timeout: 0.05)
 
         let page2Events = [Event(id: "2"), Event(id: "3")]
         let page2 = Page(size: 2, totalElements: 3, totalPages: 2, number: 1)
@@ -114,6 +124,8 @@ final class HomeViewModelTests: XCTestCase {
             .sink { state in
                 if case let .loaded(events) = state, events.count == 3 {
                     XCTAssertEqual(events.count, page1Events.count + page2Events.count, "Should have combined events")
+                    XCTAssertEqual(self.sut.allEvents, page1Events + page2Events)
+                    XCTAssertFalse(self.sut.shouldLoadMore)
                     expectation2.fulfill()
                 }
             }
@@ -125,6 +137,31 @@ final class HomeViewModelTests: XCTestCase {
         XCTAssertEqual(sut.shouldLoadMore, false, "Should not load more if totalPages is reached")
         XCTAssertEqual(mockService.loadCallCount, 2, "load should be called more than once for load more")
         XCTAssertEqual(mockService.receivedFilter?.page, 1, "Load more should request page 1")
+    }
+
+    func testLoadEvents_emptyResultsSetsShouldLoadMoreToFalse() async throws {
+        let mockPage = Page(size: 0, totalElements: 0, totalPages: 0, number: 0)
+        let mockEventsResponse = Events(embedded: nil, page: mockPage)
+        mockService.loadResult = .success(mockEventsResponse)
+
+        let expectation = XCTestExpectation(description: "Events loaded as empty")
+
+        sut.$events
+            .dropFirst()
+            .sink { loadableEvents in
+                if case let .loaded(events) = loadableEvents {
+                    XCTAssertTrue(events.isEmpty)
+                    XCTAssertFalse(self.sut.shouldLoadMore)
+                    expectation.fulfill()
+                }
+            }
+            .store(in: &cancellables)
+
+        await sut.loadEvents()
+
+        await fulfillment(of: [expectation], timeout: 1.0)
+        XCTAssertEqual(mockService.loadCallCount, 1)
+        XCTAssertEqual(sut.allEvents.count, 0)
     }
 
     func testLoadEvents_resetFunctionality() async throws {
@@ -159,6 +196,7 @@ final class HomeViewModelTests: XCTestCase {
             .sink { loadableEvents in
                 if case let .loaded(events) = loadableEvents, events.count == 3 {
                     XCTAssertEqual(events.count, newEvents.count, "Should have only new events after reset")
+                    XCTAssertEqual(self.sut.allEvents, newEvents)
                     expectation2.fulfill()
                 }
             }
@@ -177,12 +215,28 @@ final class HomeViewModelTests: XCTestCase {
         let mockPage = Page(size: 1, totalElements: 1, totalPages: 1, number: 0)
         let mockEventsResponse = Events(embedded: .init(events: mockEvents), page: mockPage)
         mockService.loadResult = .success(mockEventsResponse)
+        mockService.delay = 0.1
 
-        await sut.loadEvents()
+        let firstLoadExpectation = XCTestExpectation(description: "First load should complete")
+        sut.$events
+            .dropFirst()
+            .sink { loadableEvents in
+                if case .loaded = loadableEvents {
+                    firstLoadExpectation.fulfill()
+                }
+            }
+            .store(in: &cancellables)
 
-        await sut.loadEvents()
+        let task1 = Task { await sut.loadEvents() }
+        let task2 = Task { await sut.loadEvents() }
 
-        XCTAssertEqual(mockService.loadCallCount, 2, "load should be called once after first call")
+        await task1.value
+        await task2.value
+
+        await fulfillment(of: [firstLoadExpectation], timeout: 1.0)
+
+        XCTAssertEqual(mockService.loadCallCount, 1, "load should be called once after first call")
         XCTAssertEqual(sut.isLoadingMore, false, "load should not be called again if already loading")
+        XCTAssertEqual(sut.allEvents.count, 1, "Events should contain data from the first fetch")
     }
 }

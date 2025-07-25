@@ -5,7 +5,7 @@
 //  Created by Nanda WK on 2025-07-24.
 //
 
-struct Event: Codable {
+struct Event: Codable, Equatable {
     let id: String
     let name: String?
     let info: String?
@@ -43,7 +43,7 @@ struct Event: Codable {
     }
 }
 
-struct EmbeddedVenues: Codable {
+struct EmbeddedVenues: Codable, Equatable {
     let venues: [Venue]
 
     init(venues: [Venue] = [Venue()]) {

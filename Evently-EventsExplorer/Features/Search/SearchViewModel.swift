@@ -9,7 +9,7 @@ import Foundation
 
 class SearchViewModel {
     private(set) var events: [Event] = []
-    private var page = 0
+    private(set) var page = 0
     private(set) var canLoadMore = true
     private(set) var isFetching = false
 
@@ -28,17 +28,18 @@ class SearchViewModel {
         events.removeAll()
         page = 0
         canLoadMore = true
+        isFetching = false
         isEventListEmpty = false
     }
 
     func loadEvents(reset: Bool = false) async {
-        guard !isFetching, canLoadMore else { return }
-        isFetching = true
-        onUpdate?()
-
         if reset {
             self.reset()
         }
+
+        guard !isFetching, canLoadMore else { return }
+        isFetching = true
+        onUpdate?()
 
         do {
             print("Fetching page \(page) for keyword: \(keyword)")
