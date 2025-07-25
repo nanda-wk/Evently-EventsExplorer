@@ -6,9 +6,11 @@ Evently-EventsExplorer is an iOS application designed to help users discover and
 
 ![Screen Shot](images/image.png)
 
-<img src="./images/home.png" width="150" />
-<img src="./images/details.png" width="150" />
-<img src="./images/search.png" width="150" />
+<div style="display: flex;">
+    <img src="./images/home.png" width="150" />
+    <img src="./images/details.png" width="150" />
+    <img src="./images/search.png" width="150" />
+</div>
 
 ## Features
 
