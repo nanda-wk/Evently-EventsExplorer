@@ -15,11 +15,7 @@ struct EventDiscoveryService: EventDiscoveryServiceProtocol {
     let apiRepository: EventDiscoveryRepositoryProtocol
 
     func load(with filter: Filter) async throws -> Events {
-        do {
-            return try await apiRepository.events(with: filter)
-        } catch {
-            throw error
-        }
+        try await apiRepository.events(with: filter)
     }
 }
 

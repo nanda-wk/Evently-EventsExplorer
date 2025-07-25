@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Events: Codable {
+struct Events: Codable, Equatable {
     let embedded: EmbeddedEvents?
     let page: Page
 
@@ -20,9 +20,13 @@ struct Events: Codable {
         self.embedded = embedded
         self.page = page
     }
+
+    static func == (lhs: Events, rhs: Events) -> Bool {
+        lhs.embedded == rhs.embedded
+    }
 }
 
-struct EmbeddedEvents: Codable {
+struct EmbeddedEvents: Codable, Equatable {
     let events: [Event]
 
     enum CodingKeys: String, CodingKey {
