@@ -154,7 +154,7 @@ extension SearchViewController: UITableViewDataSource {
         tableView.deselectRow(at: indexPath, animated: true)
         let event = viewModel.event(at: indexPath.row)
 
-        let detailView = EventDetail(event: event)
+        let detailView = EventDetail(viewModel: .init(container: container, event: event))
 
         let hostingController = UIHostingController(rootView: detailView)
 

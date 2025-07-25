@@ -50,7 +50,7 @@ extension Home {
         List {
             ForEach(events, id: \.id) { event in
                 NavigationLink {
-                    EventDetail(event: event)
+                    EventDetail(viewModel: .init(container: viewModel.container, event: event))
                 } label: {
                     EventCell(event: event)
                 }

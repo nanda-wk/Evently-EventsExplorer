@@ -9,6 +9,7 @@ import Foundation
 
 protocol EventDiscoveryRepositoryProtocol: NetworkProtocol {
     func events(with filter: Filter) async throws -> Events
+    func eventDetails(event: Event) async throws -> Event
 }
 
 struct EventDiscoveryRepository: EventDiscoveryRepositoryProtocol {
@@ -17,12 +18,16 @@ struct EventDiscoveryRepository: EventDiscoveryRepositoryProtocol {
     func events(with filter: Filter) async throws -> Events {
         try await request(requestConfiguration: API.events(filter: filter))
     }
+
+    func eventDetails(event: Event) async throws -> Event {
+        try await request(requestConfiguration: API.eventDetails(event.id))
+    }
 }
 
 extension EventDiscoveryRepository {
     enum API {
         case events(filter: Filter)
-        case eventDetails(Int)
+        case eventDetails(String)
     }
 }
 

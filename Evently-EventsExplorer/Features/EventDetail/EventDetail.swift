@@ -9,29 +9,45 @@ import SwiftUI
 
 struct EventDetail: View {
     @Environment(\.dismiss) private var dismiss
+    @ObservedObject var viewModel: ViewModel
 
-    let event: Event
+    var body: some View {
+        content
+            .navigationTitle("Event Details")
+            .navigationBarTitleDisplayMode(.inline)
+            .navigationBarBackButtonHidden(true)
+            .task {
+                await viewModel.loadEventDetails()
+            }
+            .toolbar {
+                ToolbarItem(placement: .topBarLeading) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image(systemName: "chevron.backward")
+                    }
+                    .tint(.appPrimary)
+                }
+            }
+    }
+}
 
-    private var date = ""
-    private var time = ""
-    private var address = ""
-    private var venue: Venue = .init()
-
-    init(event: Event) {
-        self.event = event
-        let date = event.dates?.start?.localDate
-        let time = event.dates?.start?.localTime
-        if let date, let time {
-            self.date = date.toFormatedDate(format: .dd_MMMM_yyyy)
-            self.time = "\(date.toFormatedDate(format: .EEEE)) • \(time.toFormatedDate(format: .hmm_a))"
-        }
-        if let embedded = event.embedded, let venue = embedded.venues.first, let address = venue.address, let city = venue.city {
-            self.venue = venue
-            self.address = "\(address.line1.orEmpty) • \(city.name.orEmpty)"
+extension EventDetail {
+    @ViewBuilder
+    private var content: some View {
+        switch viewModel.details {
+        case .isLoading:
+            ProgressView()
+                .padding()
+                .scaleEffect(2)
+        case let .loaded(event):
+            loadedView(event: event)
+        case let .failed(error):
+            Text("Failed to fetch event detail: \(error)")
         }
     }
 
-    var body: some View {
+    private func loadedView(event: Event) -> some View {
         ScrollView {
             LazyVStack(alignment: .leading, spacing: 0) {
                 AsyncImage(url: event.images.first?.url) { image in
@@ -53,30 +69,17 @@ struct EventDetail: View {
                         .fontWeight(.medium)
 
                     VStack(alignment: .leading, spacing: 16) {
-                        if !time.isEmpty {
-                            customListTile(icon: "calendar", title: date, subtitle: time)
+                        if !viewModel.time.isEmpty, !viewModel.date.isEmpty {
+                            customListTile(icon: "calendar", title: viewModel.date, subtitle: viewModel.time)
                         }
-                        if !address.isEmpty {
-                            customListTile(icon: "mappin.and.ellipse", title: venue.name.orEmpty, subtitle: address)
+                        if !viewModel.address.isEmpty {
+                            customListTile(icon: "mappin.and.ellipse", title: viewModel.venue.name.orEmpty, subtitle: viewModel.address)
                         }
                     }
 
-                    aboutSection
+                    aboutSection(info: event.info)
                 }
                 .padding()
-            }
-        }
-        .navigationTitle("Event Details")
-        .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true)
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image(systemName: "chevron.backward")
-                }
-                .tint(.appPrimary)
             }
         }
     }
@@ -105,8 +108,8 @@ extension EventDetail {
     }
 
     @ViewBuilder
-    private var aboutSection: some View {
-        if let info = event.info {
+    private func aboutSection(info: String?) -> some View {
+        if let info {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Important Event Info")
                     .fontWeight(.medium)
@@ -121,6 +124,6 @@ extension EventDetail {
 
 #Preview {
     NavigationStack {
-        EventDetail(event: .mockData)
+        EventDetail(viewModel: .init(container: .preview, event: .mockData))
     }
 }
