@@ -87,3 +87,20 @@ Evently-EventsExplorer/
 ├───Evently-EventsExplorerTests/    # Unit tests
 └───Evently-EventsExplorer.xcodeproj/ # Xcode project file
 ```
+
+## Trade-offs and Assumptions
+
+*   **API Key Handling:** The API key is stored in an `xcconfig` file and accessed via `Bundle.main.object(forInfoDictionaryKey:)`. While convenient for development, for a production application, a more secure method of handling API keys (e.g., backend proxy, encrypted storage) would be considered.
+*   **Error Handling Granularity:** Current error handling in the networking layer (`NetworkError`) is relatively high-level. For a more robust production app, more granular error types and user-facing error messages would be beneficial.
+*   **Offline Support:** The current implementation assumes continuous network connectivity. There is no explicit caching or offline mode implemented.
+*   **Limited API Endpoints:** The application currently only interacts with the `/events` endpoint of the Ticketmaster Discovery API.
+*   **UI/UX Simplicity:** The UI is designed for clarity and functionality, prioritizing core features over extensive animations or complex interactions.
+
+## What to Improve with More Time
+
+*   **Comprehensive Error Handling & UI Feedback:** Implement more detailed error handling with user-friendly alerts and recovery options for network failures, decoding issues, and other unexpected scenarios.
+*   **Offline Caching:** Introduce a caching mechanism (e.g., using Core Data or Realm) to store event data, allowing users to browse previously loaded events even without an internet connection.
+*   **Advanced Search & Filtering:** Expand the search functionality to include more advanced filters (e.g., date range, genre, venue, city) and sorting options.
+*   **Performance Optimizations:** Implement image caching (e.g., using Kingfisher or SDWebImage) for event images to improve scrolling performance and reduce network requests.
+*   **User's Favorites:** Implement the ability to mark events as favorites.
+
