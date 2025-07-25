@@ -53,7 +53,9 @@ struct EventDetail: View {
                         .fontWeight(.medium)
 
                     VStack(alignment: .leading, spacing: 16) {
-                        customListTile(icon: "calendar", title: date, subtitle: time)
+                        if !time.isEmpty {
+                            customListTile(icon: "calendar", title: date, subtitle: time)
+                        }
                         if !address.isEmpty {
                             customListTile(icon: "mappin.and.ellipse", title: venue.name.orEmpty, subtitle: address)
                         }
