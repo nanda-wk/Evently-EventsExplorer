@@ -93,7 +93,7 @@ Evently-EventsExplorer/
 *   **API Key Handling:** The API key is stored in an `xcconfig` file and accessed via `Bundle.main.object(forInfoDictionaryKey:)`. While convenient for development, for a production application, a more secure method of handling API keys (e.g., backend proxy, encrypted storage) would be considered.
 *   **Error Handling Granularity:** Current error handling in the networking layer (`NetworkError`) is relatively high-level. For a more robust production app, more granular error types and user-facing error messages would be beneficial.
 *   **Offline Support:** The current implementation assumes continuous network connectivity. There is no explicit caching or offline mode implemented.
-*   **Limited API Endpoints:** The application currently only interacts with the `/events` endpoint of the Ticketmaster Discovery API.
+*   **Limited API Endpoints:** The application currently only interacts with the `/events` and `/events/{id}` endpoint of the Ticketmaster Discovery API.
 *   **UI/UX Simplicity:** The UI is designed for clarity and functionality, prioritizing core features over extensive animations or complex interactions.
 
 ## What to Improve with More Time
