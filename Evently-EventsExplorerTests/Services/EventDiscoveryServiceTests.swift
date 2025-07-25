@@ -44,4 +44,27 @@ final class EventDiscoveryServiceTests: XCTestCase {
             XCTFail("Expected TestError, but got \(error)")
         }
     }
+
+    func test_load_details_success() async throws {
+        let expectedEvent = Event.mockData
+        mockRepository.detailsResult = .success(expectedEvent)
+
+        let event = try await sut.load(eventDetails: expectedEvent)
+
+        XCTAssertEqual(event, expectedEvent)
+    }
+
+    func test_load_details_failure_error() async {
+        enum TestError: Error { case someError }
+        mockRepository.detailsResult = .failure(TestError.someError)
+
+        do {
+            _ = try await sut.load(eventDetails: .mockData)
+            XCTFail("Expected error to be thrown, but got success")
+        } catch let error as TestError {
+            XCTAssertEqual(error, TestError.someError)
+        } catch {
+            XCTFail("Expected TestError, but got \(error)")
+        }
+    }
 }

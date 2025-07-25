@@ -27,10 +27,10 @@ extension EventDetail {
         func loadEventDetails() async {
             do {
                 let eventDetails = try await container.services.eventDiscoveryService.load(eventDetails: event)
-                details = .loaded(eventDetails)
                 (date, time) = formatEventDateTime(date: eventDetails.dates)
                 venue = eventDetails.embedded?.venues.first ?? .init()
                 address = venue.address?.line1.orEmpty ?? ""
+                details = .loaded(eventDetails)
             } catch {
                 details = .failed(error)
             }

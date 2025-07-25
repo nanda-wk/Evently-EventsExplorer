@@ -104,4 +104,83 @@ final class EventDiscoveryRepositoryTests: XCTestCase {
             XCTFail("Expected NetworkError, but got unexpected error type: \(error)")
         }
     }
+
+    func test_event_details_success() async throws {
+        let expected = Event.mockData
+        let jsonData = try JSONEncoder().encode(expected)
+        mockSession.data = jsonData
+        mockSession.response = HTTPURLResponse(url: URL(string: "https://example.com")!, statusCode: 200, httpVersion: nil, headerFields: nil)
+
+        let fetchedEvent = try await sut.eventDetails(event: expected)
+
+        XCTAssertEqual(fetchedEvent, expected)
+        XCTAssertNotNil(mockSession.lastRequest)
+        XCTAssertEqual(mockSession.lastRequest?.url?.path, "/discovery/v2/events/\(expected.id)")
+
+        XCTAssertEqual(mockSession.lastRequest?.httpMethod, "GET")
+
+        let urlComponents = URLComponents(url: mockSession.lastRequest!.url!, resolvingAgainstBaseURL: false)
+        let queryItems = urlComponents?.queryItems
+        XCTAssertTrue(queryItems?.contains(where: { $0.name == "apikey" }) ?? false)
+    }
+
+    func test_event_details_failure_invalidURL() async {
+        mockSession.error = NetworkError.invalidURL
+
+        do {
+            _ = try await sut.eventDetails(event: .mockData)
+            XCTFail("Expected NetworkError.invalidURL to be thrown, but got success")
+        } catch let error as NetworkError {
+            XCTAssertEqual(error, NetworkError.invalidURL)
+        } catch {
+            XCTFail("Expected NetworkError, but got unexpected error type: \(error)")
+        }
+    }
+
+    func test_event_details_failure_httpCode() async {
+        mockSession.data = Data()
+        mockSession.response = HTTPURLResponse(url: URL(string: "https://example.com")!, statusCode: 404, httpVersion: nil, headerFields: nil)
+
+        do {
+            _ = try await sut.eventDetails(event: .mockData)
+            XCTFail("Expected NetworkError.httpCode to be thrown, but got success")
+        } catch let error as NetworkError {
+            XCTAssertEqual(error, NetworkError.httpCode(404))
+        } catch {
+            XCTFail("Expected NetworkError, but got unexpected error type: \(error)")
+        }
+    }
+
+    func test_event_details_failure_invalidDecoding() async {
+        let invalidJsonData = #"{"invalid": "json"}"#.data(using: .utf8)!
+        mockSession.data = invalidJsonData
+        mockSession.response = HTTPURLResponse(url: URL(string: "https://example.com")!, statusCode: 200, httpVersion: nil, headerFields: nil)
+
+        do {
+            _ = try await sut.eventDetails(event: .mockData)
+            XCTFail("Expected NetworkError.invalidDecoding to be thrown, but got success")
+        } catch let error as NetworkError {
+            if case .invalidDecoding = error {
+                XCTAssert(true, "Caught expected NetworkError.invalidDecoding")
+            } else {
+                XCTFail("Expected NetworkError.invalidDecoding, but got \(error)")
+            }
+        } catch {
+            XCTFail("Expected NetworkError, but got unexpected error type: \(error)")
+        }
+    }
+
+    func test_event_details_failure_unexpectedResponse() async {
+        mockSession.data = Data()
+        mockSession.response = URLResponse(url: URL(string: "https://example.com")!, mimeType: nil, expectedContentLength: 0, textEncodingName: nil)
+
+        do {
+            _ = try await sut.eventDetails(event: .mockData)
+            XCTFail("Expected NetworkError.unexpectedResponse to be thrown, but got success")
+        } catch let error as NetworkError {
+            XCTAssertEqual(error, NetworkError.unexpectedResponse)
+        } catch {
+            XCTFail("Expected NetworkError, but got unexpected error type: \(error)")
+        }
+    }
 }

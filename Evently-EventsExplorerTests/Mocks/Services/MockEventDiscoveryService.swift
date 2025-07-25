@@ -10,6 +10,7 @@ import Foundation
 
 class MockEventDiscoveryService: EventDiscoveryServiceProtocol {
     var loadResult: Result<Events, Error>?
+    var loadDetails: Result<Event, Error>?
     var loadCallCount = 0
     var receivedFilter: Filter?
     var delay: TimeInterval = 0.0
@@ -29,5 +30,21 @@ class MockEventDiscoveryService: EventDiscoveryServiceProtocol {
             }
         }
         fatalError("loadResult not set for MockEventDiscoveryService")
+    }
+
+    func load(eventDetails _: Event) async throws -> Event {
+        if delay > 0 {
+            try await Task.sleep(nanoseconds: UInt64(delay * 1_000_000_000))
+        }
+        loadCallCount += 1
+        if let result = loadDetails {
+            switch result {
+            case let .success(event):
+                return event
+            case let .failure(error):
+                throw error
+            }
+        }
+        fatalError("loadDetails not set for MockEventDiscoveryService")
     }
 }
