@@ -9,7 +9,7 @@
 import Foundation
 
 class MockEventDiscoveryRepository: EventDiscoveryRepositoryProtocol {
-    var session: URLSession = .shared
+    var session: URLSessionProtocol = URLSession.shared
 
     var eventsResult: Result<Events, Error>?
 

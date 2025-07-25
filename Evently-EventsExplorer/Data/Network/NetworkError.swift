@@ -15,3 +15,14 @@ enum NetworkError: Error {
     case invalidEncoding
     case invalidDecoding(Error)
 }
+
+extension NetworkError: Equatable {
+    static func == (lhs: NetworkError, rhs: NetworkError) -> Bool {
+        switch (lhs, rhs) {
+        case (.invalidURL, .invalidURL), (.unexpectedResponse, .unexpectedResponse), (.imageDeserialization, .imageDeserialization), (.invalidEncoding, .invalidEncoding): true
+        case let (.httpCode(lhsCode), .httpCode(rhsCode)): lhsCode == rhsCode
+        case let (.invalidDecoding(lhsError), .invalidDecoding(rhsError)): lhsError as NSError == rhsError as NSError
+        default: false
+        }
+    }
+}

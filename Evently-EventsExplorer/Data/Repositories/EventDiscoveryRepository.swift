@@ -12,7 +12,7 @@ protocol EventDiscoveryRepositoryProtocol: NetworkProtocol {
 }
 
 struct EventDiscoveryRepository: EventDiscoveryRepositoryProtocol {
-    var session: URLSession
+    var session: URLSessionProtocol
 
     func events(with filter: Filter) async throws -> Events {
         try await request(requestConfiguration: API.events(filter: filter))
