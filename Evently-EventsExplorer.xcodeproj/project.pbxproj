@@ -14,19 +14,11 @@
 			remoteGlobalIDString = 53BF34BC2E2F858C00EC4E8B;
 			remoteInfo = "Evently-EventsExplorer";
 		};
-		53BF34D52E2F858E00EC4E8B /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 53BF34B52E2F858C00EC4E8B /* Project object */;
-			proxyType = 1;
-			remoteGlobalIDString = 53BF34BC2E2F858C00EC4E8B;
-			remoteInfo = "Evently-EventsExplorer";
-		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		53BF34BD2E2F858C00EC4E8B /* Evently-EventsExplorer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Evently-EventsExplorer.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		53BF34CA2E2F858E00EC4E8B /* Evently-EventsExplorerTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Evently-EventsExplorerTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		53BF34D42E2F858E00EC4E8B /* Evently-EventsExplorerUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Evently-EventsExplorerUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -53,11 +45,6 @@
 			path = "Evently-EventsExplorerTests";
 			sourceTree = "<group>";
 		};
-		53BF34D72E2F858E00EC4E8B /* Evently-EventsExplorerUITests */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "Evently-EventsExplorerUITests";
-			sourceTree = "<group>";
-		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,13 +62,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		53BF34D12E2F858E00EC4E8B /* Frameworks */ = {
-			isa = PBXFrameworksBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -90,7 +70,6 @@
 			children = (
 				53BF34BF2E2F858C00EC4E8B /* Evently-EventsExplorer */,
 				53BF34CD2E2F858E00EC4E8B /* Evently-EventsExplorerTests */,
-				53BF34D72E2F858E00EC4E8B /* Evently-EventsExplorerUITests */,
 				53BF34BE2E2F858C00EC4E8B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -100,7 +79,6 @@
 			children = (
 				53BF34BD2E2F858C00EC4E8B /* Evently-EventsExplorer.app */,
 				53BF34CA2E2F858E00EC4E8B /* Evently-EventsExplorerTests.xctest */,
-				53BF34D42E2F858E00EC4E8B /* Evently-EventsExplorerUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -153,29 +131,6 @@
 			productReference = 53BF34CA2E2F858E00EC4E8B /* Evently-EventsExplorerTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		53BF34D32E2F858E00EC4E8B /* Evently-EventsExplorerUITests */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = 53BF34E42E2F858E00EC4E8B /* Build configuration list for PBXNativeTarget "Evently-EventsExplorerUITests" */;
-			buildPhases = (
-				53BF34D02E2F858E00EC4E8B /* Sources */,
-				53BF34D12E2F858E00EC4E8B /* Frameworks */,
-				53BF34D22E2F858E00EC4E8B /* Resources */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				53BF34D62E2F858E00EC4E8B /* PBXTargetDependency */,
-			);
-			fileSystemSynchronizedGroups = (
-				53BF34D72E2F858E00EC4E8B /* Evently-EventsExplorerUITests */,
-			);
-			name = "Evently-EventsExplorerUITests";
-			packageProductDependencies = (
-			);
-			productName = "Evently-EventsExplorerUITests";
-			productReference = 53BF34D42E2F858E00EC4E8B /* Evently-EventsExplorerUITests.xctest */;
-			productType = "com.apple.product-type.bundle.ui-testing";
-		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -190,10 +145,6 @@
 						CreatedOnToolsVersion = 16.4;
 					};
 					53BF34C92E2F858E00EC4E8B = {
-						CreatedOnToolsVersion = 16.4;
-						TestTargetID = 53BF34BC2E2F858C00EC4E8B;
-					};
-					53BF34D32E2F858E00EC4E8B = {
 						CreatedOnToolsVersion = 16.4;
 						TestTargetID = 53BF34BC2E2F858C00EC4E8B;
 					};
@@ -215,7 +166,6 @@
 			targets = (
 				53BF34BC2E2F858C00EC4E8B /* Evently-EventsExplorer */,
 				53BF34C92E2F858E00EC4E8B /* Evently-EventsExplorerTests */,
-				53BF34D32E2F858E00EC4E8B /* Evently-EventsExplorerUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -229,13 +179,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 		53BF34C82E2F858E00EC4E8B /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		53BF34D22E2F858E00EC4E8B /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -259,13 +202,6 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		53BF34D02E2F858E00EC4E8B /* Sources */ = {
-			isa = PBXSourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -273,11 +209,6 @@
 			isa = PBXTargetDependency;
 			target = 53BF34BC2E2F858C00EC4E8B /* Evently-EventsExplorer */;
 			targetProxy = 53BF34CB2E2F858E00EC4E8B /* PBXContainerItemProxy */;
-		};
-		53BF34D62E2F858E00EC4E8B /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			target = 53BF34BC2E2F858C00EC4E8B /* Evently-EventsExplorer */;
-			targetProxy = 53BF34D52E2F858E00EC4E8B /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -505,40 +436,6 @@
 			};
 			name = Release;
 		};
-		53BF34E52E2F858E00EC4E8B /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2G3ZY4K567;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.nanda.Evently-EventsExplorerUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "Evently-EventsExplorer";
-			};
-			name = Debug;
-		};
-		53BF34E62E2F858E00EC4E8B /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 2G3ZY4K567;
-				GENERATE_INFOPLIST_FILE = YES;
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.nanda.Evently-EventsExplorerUITests";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_EMIT_LOC_STRINGS = NO;
-				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_TARGET_NAME = "Evently-EventsExplorer";
-			};
-			name = Release;
-		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -565,15 +462,6 @@
 			buildConfigurations = (
 				53BF34E22E2F858E00EC4E8B /* Debug */,
 				53BF34E32E2F858E00EC4E8B /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		53BF34E42E2F858E00EC4E8B /* Build configuration list for PBXNativeTarget "Evently-EventsExplorerUITests" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				53BF34E52E2F858E00EC4E8B /* Debug */,
-				53BF34E62E2F858E00EC4E8B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
