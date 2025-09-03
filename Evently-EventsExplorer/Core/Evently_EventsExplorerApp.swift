@@ -15,5 +15,6 @@ struct Evently_EventsExplorerApp: App {
         WindowGroup {
             Home(viewModel: .init(container: environment.container))
         }
+        // CI/CD Test with Xcode Cloud
     }
 }
