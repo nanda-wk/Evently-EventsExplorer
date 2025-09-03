@@ -32,6 +32,9 @@ extension Home {
             }
 
             isLoadingMore = true
+            defer {
+                isLoadingMore = false
+            }
 
             do {
                 let filter = Filter(page: page)
@@ -44,10 +47,11 @@ extension Home {
                 shouldLoadMore = page < pagedEvents.page.totalPages
                 events = .loaded(allEvents)
             } catch {
+                if (error as? URLError)?.code == .cancelled {
+                    return
+                }
                 events = .failed(error)
             }
-
-            isLoadingMore = false
         }
     }
 }

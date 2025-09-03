@@ -41,6 +41,8 @@ struct SearchViewControllerWrapper: UIViewControllerRepresentable {
     }
 }
 
-#Preview {
-    SearchView(container: .preview)
-}
+#if DEBUG
+    #Preview {
+        SearchView(container: .preview)
+    }
+#endif

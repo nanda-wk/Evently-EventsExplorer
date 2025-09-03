@@ -158,7 +158,6 @@ extension SearchViewController: UITableViewDataSource {
 
         let hostingController = UIHostingController(rootView: detailView)
 
-        navigationController?.setNavigationBarHidden(true, animated: true)
         navigationController?.pushViewController(hostingController, animated: true)
     }
 }

@@ -26,10 +26,10 @@ struct EventDiscoveryService: EventDiscoveryServiceProtocol {
 
 struct StubEventDiscoveryService: EventDiscoveryServiceProtocol {
     func load(with _: Filter = Filter()) async throws -> Events {
-        .mockData
+        Events()
     }
 
     func load(eventDetails _: Event) async throws -> Event {
-        .mockData
+        Event()
     }
 }

@@ -64,6 +64,8 @@ struct EventCell: View {
     }
 }
 
-#Preview {
-    EventCell(event: .mockData)
-}
+#if DEBUG
+    #Preview {
+        EventCell(event: .mockData)
+    }
+#endif

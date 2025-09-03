@@ -122,8 +122,10 @@ extension EventDetail {
     }
 }
 
-#Preview {
-    NavigationStack {
-        EventDetail(viewModel: .init(container: .preview, event: .mockData))
+#if DEBUG
+    #Preview {
+        NavigationStack {
+            EventDetail(viewModel: .init(container: .preview, event: .mockData))
+        }
     }
-}
+#endif

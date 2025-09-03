@@ -14,9 +14,6 @@ struct Home: View {
             content
                 .navigationTitle("Discover Events")
                 .navigationBarTitleDisplayMode(.inline)
-                .task {
-                    await viewModel.loadEvents()
-                }
                 .toolbar {
                     ToolbarItem(placement: .topBarTrailing) {
                         NavigationLink {
@@ -27,6 +24,9 @@ struct Home: View {
                         .tint(.appPrimary)
                     }
                 }
+        }
+        .task {
+            await viewModel.loadEvents()
         }
     }
 }
@@ -74,6 +74,8 @@ extension Home {
     }
 }
 
-#Preview {
-    Home(viewModel: .init(container: .preview))
-}
+#if DEBUG
+    #Preview {
+        Home(viewModel: .init(container: .preview))
+    }
+#endif
