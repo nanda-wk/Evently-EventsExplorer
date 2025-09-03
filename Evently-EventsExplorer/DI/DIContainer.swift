@@ -8,12 +8,8 @@
 import Foundation
 import SwiftUI
 
-struct DIContainer: EnvironmentKey {
+struct DIContainer {
     let services: Services
-
-    static var defaultValue: Self { Self.default }
-
-    private static let `default` = DIContainer(services: .stub)
 }
 
 extension DIContainer {
